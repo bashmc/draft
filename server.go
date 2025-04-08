@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/g88x/draft/handlers"
+	"github.com/topkobie/draft/handlers"
 )
 
 type AppServer struct {

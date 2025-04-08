@@ -1,3 +1,3 @@
-module github.com/g88x/draft
+module github.com/topkobie/draft
 
 go 1.24.1
