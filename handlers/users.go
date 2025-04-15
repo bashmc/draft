@@ -1,7 +1,87 @@
 package handlers
 
-import "net/http"
+import (
+	"errors"
+	"log/slog"
+	"net/http"
 
-func (h *ApiHandler) CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	writeJson(w, 201, Map{"message": "New user has been created"})
+	"github.com/gitkobie/draft/models"
+)
+
+func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Name     string `json:"name" validate:"required"`
+		Email    string `json:"email" validate:"required,email"`
+		Password string `json:"password" validate:"required,gte=8,lte=20"`
+	}
+
+	err := readJson(w, r, &input)
+	if err != nil {
+		slog.Error("failed to read request body", "error", err)
+		writeJson(w, http.StatusBadRequest, Map{"message": "failed to parse request body"})
+		return
+	}
+
+	err = validate.Struct(input)
+	if err != nil {
+		writeJson(w, http.StatusBadRequest, Map{"message": err.Error()})
+		return
+	}
+
+	user, err := h.us.CreateUser(r.Context(), input.Name, input.Email, input.Password)
+	if err != nil {
+		if errors.Is(err, models.ErrDuplicateUser) {
+			writeJson(w, http.StatusConflict, Map{"message": err.Error()})
+			return
+		}
+
+		serverError(w)
+		return
+	}
+
+	writeJson(w, http.StatusCreated, user)
+}
+
+func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
+	userId := r.PathValue("id")
+	err := validate.Var(userId, "uuid")
+	if err != nil {
+		writeJson(w, http.StatusBadRequest, Map{"message": "invalid id"})
+		return
+	}
+
+	user, err := h.us.FetchUser(r.Context(), userId)
+	if err != nil {
+		if errors.Is(err, models.ErrUserNotFound) {
+			writeJson(w, http.StatusNotFound, Map{"message": err.Error()})
+			return
+		}
+
+		serverError(w)
+		return
+	}
+
+	writeJson(w, http.StatusOK, user)
+}
+
+func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	userId := r.PathValue("id")
+	err := validate.Var(userId, "uuid")
+	if err != nil {
+		writeJson(w, http.StatusBadRequest, Map{"message": "invalid id"})
+		return
+	}
+
+	err = h.us.DeleteUser(r.Context(), userId)
+	if err != nil {
+		if errors.Is(err, models.ErrUserNotFound) {
+			writeJson(w, http.StatusNotFound, Map{"message": err.Error()})
+			return
+		}
+
+		serverError(w)
+		return
+	}
+
+	writeJson(w, http.StatusOK, Map{"message": "user successfully deleted"})
 }

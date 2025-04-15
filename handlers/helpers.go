@@ -45,7 +45,7 @@ func readJson(w http.ResponseWriter, r *http.Request, dest any) error {
 	return nil
 }
 
-func sendServerError(w http.ResponseWriter) {
+func serverError(w http.ResponseWriter) {
 	writeJson(w, http.StatusInternalServerError, Map{
 		"message": "the server could not process your request",
 	})
