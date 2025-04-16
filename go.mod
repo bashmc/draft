@@ -1,4 +1,4 @@
-module github.com/gitkobie/draft
+module github.com/bashmc/draft
 
 go 1.24.1
 

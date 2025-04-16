@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/gitkobie/draft/models"
+	"github.com/bashmc/draft/models"
 )
 
 func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {

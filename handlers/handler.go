@@ -1,12 +1,9 @@
 package handlers
 
 import (
-	"github.com/gitkobie/draft/services"
+	"github.com/bashmc/draft/services"
 	"github.com/go-playground/validator/v10"
 )
-
-
-
 
 // TODO: remove global variable
 var validate *validator.Validate
