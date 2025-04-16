@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/bashmc/draft/handlers"
-	"github.com/bashmc/draft/postgres"
-	"github.com/bashmc/draft/services"
+	"github.com/gitkobie/draft/handlers"
+	"github.com/gitkobie/draft/postgres"
+	"github.com/gitkobie/draft/services"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 )

@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/bashmc/draft/models"
+	"github.com/gitkobie/draft/models"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
