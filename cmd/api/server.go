@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/gitkobie/draft/handlers"
+	"github.com/bashmc/draft/handlers"
 )
 
 type application struct {
