@@ -19,7 +19,7 @@ import (
 func setupTestDB(t *testing.T) *pgxpool.Pool {
 	connStr := os.Getenv("TEST_DB_URL")
 	if connStr == "" {
-		connStr = "postgres://kobie:pa55word@localhost:5432/draft_test?sslmode=disable"
+		connStr = "postgres://kobie:pa88word@localhost:5432/draft_test?sslmode=disable"
 	}
 
 	pool, err := pgxpool.New(context.Background(), connStr)
@@ -30,7 +30,7 @@ func setupTestDB(t *testing.T) *pgxpool.Pool {
 
 func createTestUser(name, email string) *models.User {
 	return &models.User{
-		ID:           uuid.New().String(),
+		ID:           uuid.New(),
 		Name:         name,
 		Email:        email,
 		PasswordHash: []byte("hashedpassword"),
@@ -74,7 +74,7 @@ func TestUserStore_CreateUser(t *testing.T) {
 		{
 			name: "empty name",
 			user: &models.User{
-				ID:           uuid.New().String(),
+				ID:           uuid.New(),
 				Email:        generateTestEmail(),
 				PasswordHash: []byte("hashedpassword"),
 				CreatedAt:    time.Now().UTC(),
@@ -93,7 +93,7 @@ func TestUserStore_CreateUser(t *testing.T) {
 			}
 			assert.NoError(t, err)
 
-			got, err := store.GetUser(ctx, tt.user.ID)
+			got, err := store.GetUser(ctx, tt.user.ID.String())
 			require.NoError(t, err)
 			assert.Equal(t, tt.user.ID, got.ID)
 			assert.Equal(t, tt.user.Name, got.Name)
@@ -117,7 +117,7 @@ func TestUserStore_GetUser(t *testing.T) {
 	}{
 		{
 			name:    "existing user",
-			id:      user.ID,
+			id:      user.ID.String(),
 			wantErr: false,
 		},
 		{
@@ -192,7 +192,7 @@ func TestUserStore_UpdateUser(t *testing.T) {
 			}
 
 			assert.NoError(t, err)
-			got, err := store.GetUser(ctx, tt.user.ID)
+			got, err := store.GetUser(ctx, tt.user.ID.String())
 			require.NoError(t, err)
 			assert.Equal(t, tt.user.Name, got.Name)
 			assert.Equal(t, tt.user.Email, got.Email)
@@ -215,7 +215,7 @@ func TestUserStore_DeleteUser(t *testing.T) {
 	}{
 		{
 			name:    "existing user",
-			id:      user.ID,
+			id:      user.ID.String(),
 			wantErr: false,
 		},
 		{

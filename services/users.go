@@ -30,7 +30,7 @@ func (s *UserService) CreateUser(ctx context.Context, name, email, password stri
 	}
 	now := time.Now().UTC()
 	user := &models.User{
-		ID:           uuid.New().String(),
+		ID:           uuid.New(),
 		Name:         name,
 		Email:        email,
 		PasswordHash: hash,
