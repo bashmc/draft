@@ -14,8 +14,8 @@ type Project struct {
 	OwnerID     uuid.UUID  `json:"ownerId"`
 	Owner       *User      `json:"owner,omitempty"`
 	Workspace   *Workspace `json:"workspace,omitempty"`
-	StartDate   *time.Time `json:"startDate,omitempty"`
-	EndDate     *time.Time `json:"endDate,omitempty"`
+	StartDate   time.Time `json:"startDate,omitzero"`
+	EndDate     time.Time `json:"endDate,omitzero"`
 	Status      string     `json:"status"`
 	CreatedAt   time.Time  `json:"createdAt"`
 	UpdatedAt   time.Time  `json:"updatedAt"`

@@ -30,7 +30,7 @@ type Task struct {
 	Title       string       `json:"title"`
 	Description string       `json:"description"`
 	ProjectID   uuid.UUID    `json:"projectId"`
-	AssigneeID  *uuid.UUID   `json:"assigneeId,omitempty"`
+	AssigneeID  uuid.UUID    `json:"assigneeId,omitzero"`
 	Assignee    *User        `json:"assignee,omitempty"`
 	ReporterID  uuid.UUID    `json:"reporterId"`
 	Reporter    *User        `json:"reporter,omitempty"`
