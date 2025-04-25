@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bashmc/draft/models"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -28,7 +29,7 @@ func (u *UserStore) InsertUser(ctx context.Context, user *models.User) error {
 		VALUES ($1, NULLIF($2,''), $3, $4, $5, $6, $7);`
 
 	_, err := u.conn.Exec(ctx, query,
-		user.ID,
+		user.Id,
 		user.Name,
 		user.Email,
 		user.PasswordHash,
@@ -63,15 +64,15 @@ func (u *UserStore) DeleteUser(ctx context.Context, id string) error {
 }
 
 // GetUser implements models.UserStore.
-func (u *UserStore) GetUser(ctx context.Context, id string) (models.User, error) {
+func (u *UserStore) GetUser(ctx context.Context, id uuid.UUID) (models.User, error) {
 	query := `
 		SELECT id, name, email, password, created_at, updated_at, active 
 		FROM users 
-		WHERE id = $1 OR email = $1;`
+		WHERE id = $1;`
 
 	var user models.User
 	err := u.conn.QueryRow(ctx, query, id).Scan(
-		&user.ID,
+		&user.Id,
 		&user.Name,
 		&user.Email,
 		&user.PasswordHash,
@@ -100,7 +101,7 @@ func (u *UserStore) UpdateUser(ctx context.Context, user *models.User) error {
 		user.PasswordHash,
 		user.UpdatedAt,
 		user.Active,
-		user.ID,
+		user.Id,
 	)
 	if err != nil {
 		slog.Error("failed update user", "error", err)

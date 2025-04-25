@@ -1,0 +1,19 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### Create a new user account
+POST {{baseUrl}}/users
+Content-Type: {{contentType}}
+
+{
+    "name": "Jay Foreign",
+    "email": "jforeign@example.com",
+    "password": "oliverman"
+}
+
+
+### Get user by ID
+GET {{baseUrl}}/users/dfa36b59-f58e-4c2f-91c1-4a29450ffdf5
+
+### Delete user by ID
+DELETE {{baseUrl}}/users/cd7894c5-273e-437e-935b-b6a30e5fdef0

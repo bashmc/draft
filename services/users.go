@@ -30,7 +30,7 @@ func (s *UserService) CreateUser(ctx context.Context, name, email, password stri
 	}
 	now := time.Now().UTC()
 	user := &models.User{
-		ID:           uuid.New(),
+		Id:           uuid.New(),
 		Name:         name,
 		Email:        email,
 		PasswordHash: hash,
@@ -53,8 +53,8 @@ func (s *UserService) UpdateUser(ctx context.Context, user *models.User) error {
 }
 
 // FetchUser retrieves a user by ID or email
-func (s *UserService) FetchUser(ctx context.Context, identifier string) (*models.User, error) {
-	user, err := s.store.GetUser(ctx, identifier)
+func (s *UserService) FetchUser(ctx context.Context, id uuid.UUID) (*models.User, error) {
+	user, err := s.store.GetUser(ctx, id)
 	if err != nil {
 		return nil, err
 	}

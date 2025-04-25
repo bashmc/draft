@@ -14,7 +14,7 @@ var (
 )
 
 type User struct {
-	ID           uuid.UUID `json:"id"`
+	Id           uuid.UUID `json:"id"`
 	Name         string    `json:"name"`
 	Email        string    `json:"email"`
 	PasswordHash []byte    `json:"-"`
@@ -26,6 +26,6 @@ type User struct {
 type UserStore interface {
 	InsertUser(ctx context.Context, user *User) error
 	UpdateUser(ctx context.Context, user *User) error
-	GetUser(ctx context.Context, ID string) (User, error)
-	DeleteUser(ctx context.Context, ID string) error
+	GetUser(ctx context.Context, Id uuid.UUID) (User, error)
+	DeleteUser(ctx context.Context, Id string) error
 }

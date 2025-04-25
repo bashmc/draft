@@ -26,7 +26,7 @@ const (
 
 // Task represents a single work item within a project.
 type Task struct {
-	ID          uuid.UUID    `json:"id"`
+	Id          uuid.UUID    `json:"id"`
 	Title       string       `json:"title"`
 	Description string       `json:"description"`
 	ProjectID   uuid.UUID    `json:"projectId"`

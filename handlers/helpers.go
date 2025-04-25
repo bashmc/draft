@@ -5,6 +5,8 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+
+	"github.com/google/uuid"
 )
 
 type Map map[string]any
@@ -49,4 +51,8 @@ func serverError(w http.ResponseWriter) {
 	writeJson(w, http.StatusInternalServerError, Map{
 		"message": "the server could not process your request",
 	})
+}
+
+func getUUID(id string) uuid.UUID {
+	return uuid.MustParse(id)
 }

@@ -49,8 +49,9 @@ func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 		writeJson(w, http.StatusBadRequest, Map{"message": "invalid id"})
 		return
 	}
+	slog.Debug("user string from url", slog.Any("id", userId))
 
-	user, err := h.us.FetchUser(r.Context(), userId)
+	user, err := h.us.FetchUser(r.Context(), getUUID(userId))
 	if err != nil {
 		if errors.Is(err, models.ErrUserNotFound) {
 			writeJson(w, http.StatusNotFound, Map{"message": err.Error()})

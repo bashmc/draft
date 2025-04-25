@@ -5,7 +5,7 @@ env:
   TEST_DB_URL: postgres://kobie:pa88word@localhost:5432/draft_test?sslmode=disable
 tasks:
   run:
-    cmd: go run ./cmd/api
+    cmd: go run ./cmd/server
 
   up:
     cmd: goose -dir ./migrations postgres $DB_URL up

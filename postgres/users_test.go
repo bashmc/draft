@@ -30,7 +30,7 @@ func setupTestDB(t *testing.T) *pgxpool.Pool {
 
 func createTestUser(name, email string) *models.User {
 	return &models.User{
-		ID:           uuid.New(),
+		Id:           uuid.New(),
 		Name:         name,
 		Email:        email,
 		PasswordHash: []byte("hashedpassword"),
@@ -74,7 +74,7 @@ func TestUserStore_CreateUser(t *testing.T) {
 		{
 			name: "empty name",
 			user: &models.User{
-				ID:           uuid.New(),
+				Id:           uuid.New(),
 				Email:        generateTestEmail(),
 				PasswordHash: []byte("hashedpassword"),
 				CreatedAt:    time.Now().UTC(),
@@ -93,9 +93,9 @@ func TestUserStore_CreateUser(t *testing.T) {
 			}
 			assert.NoError(t, err)
 
-			got, err := store.GetUser(ctx, tt.user.ID.String())
+			got, err := store.GetUser(ctx, tt.user.Id)
 			require.NoError(t, err)
-			assert.Equal(t, tt.user.ID, got.ID)
+			assert.Equal(t, tt.user.Id, got.Id)
 			assert.Equal(t, tt.user.Name, got.Name)
 			assert.Equal(t, tt.user.Email, got.Email)
 		})
@@ -112,22 +112,22 @@ func TestUserStore_GetUser(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		id      string
+		id      uuid.UUID
 		wantErr bool
 	}{
 		{
 			name:    "existing user",
-			id:      user.ID.String(),
+			id:      user.Id,
 			wantErr: false,
 		},
 		{
 			name:    "non-existent user",
-			id:      uuid.New().String(),
+			id:      uuid.New(),
 			wantErr: true,
 		},
 		{
 			name:    "invalid ID",
-			id:      "invalid-id",
+			id:      uuid.Nil,
 			wantErr: true,
 		},
 	}
@@ -140,7 +140,7 @@ func TestUserStore_GetUser(t *testing.T) {
 				return
 			}
 			assert.NoError(t, err)
-			assert.Equal(t, user.ID, got.ID)
+			assert.Equal(t, user.Id, got.Id)
 		})
 	}
 }
@@ -192,7 +192,7 @@ func TestUserStore_UpdateUser(t *testing.T) {
 			}
 
 			assert.NoError(t, err)
-			got, err := store.GetUser(ctx, tt.user.ID.String())
+			got, err := store.GetUser(ctx, tt.user.Id)
 			require.NoError(t, err)
 			assert.Equal(t, tt.user.Name, got.Name)
 			assert.Equal(t, tt.user.Email, got.Email)
@@ -210,29 +210,29 @@ func TestUserStore_DeleteUser(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		id      string
+		id      uuid.UUID
 		wantErr bool
 	}{
 		{
 			name:    "existing user",
-			id:      user.ID.String(),
+			id:      user.Id,
 			wantErr: false,
 		},
 		{
 			name:    "non-existent user",
-			id:      uuid.New().String(),
+			id:      uuid.New(),
 			wantErr: true,
 		},
 		{
 			name:    "invalid ID",
-			id:      "invalid-id",
+			id:      uuid.Nil,
 			wantErr: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := store.DeleteUser(ctx, tt.id)
+			err := store.DeleteUser(ctx, tt.id.String())
 			if tt.wantErr {
 				require.Error(t, err)
 				return
