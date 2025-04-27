@@ -25,17 +25,18 @@ func NewUserStore(conn *pgxpool.Pool) models.UserStore {
 // InsertUser implements models.UserStore.
 func (u *UserStore) InsertUser(ctx context.Context, user *models.User) error {
 	query := `
-		INSERT INTO users (id, name, email, password, created_at, updated_at, active)
-		VALUES ($1, NULLIF($2,''), $3, $4, $5, $6, $7);`
+		INSERT INTO users (id, name, email, password, profile_photo, created_at, updated_at, verified)
+		VALUES ($1, NULLIF($2,''), $3, $4, $5, $6, $7, $8);`
 
 	_, err := u.conn.Exec(ctx, query,
 		user.Id,
 		user.Name,
 		user.Email,
 		user.PasswordHash,
+		user.ProfilePhoto,
 		user.CreatedAt,
 		user.UpdatedAt,
-		user.Active,
+		user.Verified,
 	)
 	if err != nil {
 		if strings.Contains(err.Error(), "SQLSTATE 23505") {
@@ -66,7 +67,7 @@ func (u *UserStore) DeleteUser(ctx context.Context, id string) error {
 // GetUser implements models.UserStore.
 func (u *UserStore) GetUser(ctx context.Context, id uuid.UUID) (models.User, error) {
 	query := `
-		SELECT id, name, email, password, created_at, updated_at, active 
+		SELECT id, name, email, password, profile_photo, created_at, updated_at, verified 
 		FROM users 
 		WHERE id = $1;`
 
@@ -76,9 +77,10 @@ func (u *UserStore) GetUser(ctx context.Context, id uuid.UUID) (models.User, err
 		&user.Name,
 		&user.Email,
 		&user.PasswordHash,
+		&user.ProfilePhoto,
 		&user.CreatedAt,
 		&user.UpdatedAt,
-		&user.Active,
+		&user.Verified,
 	)
 
 	if errors.Is(err, pgx.ErrNoRows) {
@@ -92,15 +94,16 @@ func (u *UserStore) GetUser(ctx context.Context, id uuid.UUID) (models.User, err
 func (u *UserStore) UpdateUser(ctx context.Context, user *models.User) error {
 	query := `
 		UPDATE users 
-		SET name = $1, email = $2, password = $3, updated_at = $4, active = $5
-		WHERE id = $6;`
+		SET name = $1, email = $2, password = $3, profile_photo = $4, updated_at = $5, verified = $6
+		WHERE id = $7;`
 
 	result, err := u.conn.Exec(ctx, query,
 		user.Name,
 		user.Email,
 		user.PasswordHash,
+		user.ProfilePhoto,
 		user.UpdatedAt,
-		user.Active,
+		user.Verified,
 		user.Id,
 	)
 	if err != nil {

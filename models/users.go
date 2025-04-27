@@ -18,9 +18,10 @@ type User struct {
 	Name         string    `json:"name"`
 	Email        string    `json:"email"`
 	PasswordHash []byte    `json:"-"`
+	ProfilePhoto string    `json:"profilePhoto"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
-	Active       bool      `json:"active"`
+	Verified     bool      `json:"verified"`
 }
 
 type UserStore interface {

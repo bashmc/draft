@@ -36,7 +36,7 @@ func (s *UserService) CreateUser(ctx context.Context, name, email, password stri
 		PasswordHash: hash,
 		CreatedAt:    now,
 		UpdatedAt:    now,
-		Active:       true,
+		Verified:     false,
 	}
 
 	if err := s.store.InsertUser(ctx, user); err != nil {

@@ -36,7 +36,7 @@ func createTestUser(name, email string) *models.User {
 		PasswordHash: []byte("hashedpassword"),
 		CreatedAt:    time.Now().UTC(),
 		UpdatedAt:    time.Now().UTC(),
-		Active:       true,
+		Verified:     true,
 	}
 }
 
