@@ -9,7 +9,6 @@ import (
 )
 
 var (
-	ErrUserNotFound  = errors.New("user not found")
 	ErrDuplicateUser = errors.New("user with email already exists")
 )
 

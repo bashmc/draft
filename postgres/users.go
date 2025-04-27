@@ -59,7 +59,7 @@ func (u *UserStore) DeleteUser(ctx context.Context, id string) error {
 	}
 
 	if result.RowsAffected() == 0 {
-		return models.ErrUserNotFound
+		return models.ErrNotFound
 	}
 	return nil
 }
@@ -84,7 +84,7 @@ func (u *UserStore) GetUser(ctx context.Context, id uuid.UUID) (models.User, err
 	)
 
 	if errors.Is(err, pgx.ErrNoRows) {
-		return models.User{}, models.ErrUserNotFound
+		return models.User{}, models.ErrNotFound
 	}
 
 	return user, nil
@@ -112,7 +112,7 @@ func (u *UserStore) UpdateUser(ctx context.Context, user *models.User) error {
 	}
 
 	if result.RowsAffected() == 0 {
-		return models.ErrUserNotFound
+		return models.ErrNotFound
 	}
 
 	return nil
