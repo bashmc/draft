@@ -4,10 +4,10 @@ CREATE TABLE IF NOT EXISTS workspaces(
     id uuid PRIMARY KEY,
     name VARCHAR(120) NOT NULL,
     description TEXT,
-    ownerId uuid NOT NULL,
-    createdAt TIMESTAMP DEFAULT now() NOT NULL,
-    updatedAt TIMESTAMP DEFAULT now() NOT NULL,
-    FOREIGN KEY(ownerId) REFERENCES users(id)
+    user_id uuid NOT NULL,
+    created_at TIMESTAMP DEFAULT now() NOT NULL,
+    updated_at TIMESTAMP DEFAULT now() NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );
 -- +goose StatementEnd
 

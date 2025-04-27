@@ -2,9 +2,14 @@ package models
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
+)
+
+var (
+	ErrNotFound = errors.New("entity not found")
 )
 
 // Workspace represents a top-level organizational unit or collaboration space.
