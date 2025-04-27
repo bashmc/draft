@@ -1,14 +1,20 @@
 package main
 
-import "net/http"
+import (
 
-func (s *application) routes() *http.ServeMux {
-	mux := http.NewServeMux()
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+)
+
+func (s *application) routes() *chi.Mux {
+	mux := chi.NewRouter()
+
+	mux.Use(middleware.Logger)
 
 	// users
-	mux.HandleFunc("POST /users", s.handler.CreateUser)
-	mux.HandleFunc("GET /users/{id}", s.handler.GetUser)
-	mux.HandleFunc("DELETE /users/{id}", s.handler.DeleteUser)
+	mux.Post("/users", s.handler.CreateUser)
+	mux.Get("/users/{id}", s.handler.GetUser)
+	mux.Delete("/users/{id}", s.handler.DeleteUser)
 
 	return mux
 }
