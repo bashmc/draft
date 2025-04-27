@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -39,4 +40,12 @@ type Task struct {
 	DueDate     time.Time    `json:"dueDate,omitzero"`
 	CreatedAt   time.Time    `json:"createdAt"`
 	UpdatedAt   time.Time    `json:"updatedAt"`
+}
+
+type TaskStore interface {
+	Create(ctx context.Context, task *Task) error
+	Update(ctx context.Context, task *Task) error
+	Get(ctx context.Context, id uuid.UUID) (Task, error)
+	GetAllForProject(ctx context.Context, projectId uuid.UUID)
+	Delete(ctx context.Context, id uuid.UUID) error
 }
