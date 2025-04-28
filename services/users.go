@@ -60,13 +60,34 @@ func (s *UserService) CreateUser(ctx context.Context, name, email, password stri
 		return nil, err
 	}
 
+	otpString := generateOTP()
+	otpHash := hashString(otpString)
+
+	userAddr := mail.Address{Name: user.Name, Email: user.Email}
+	data := mail.Data{
+		Address: userAddr,
+		Code:    otpString,
+	}
+
+	token := models.UserToken{
+		Hash:      otpHash,
+		UserId:    user.Id,
+		ExpiresAt: time.Now().Add(15 * time.Minute),
+		Scope:     VERIFICATION,
+	}
+
+	_ = s.store.InsertToken(ctx, &token)
+
+	s.sendEmail([]mail.Address{userAddr}, "verify_email.html", data)
+
+
 	return user, nil
 }
 
 func (us *UserService) VerifyUser(ctx context.Context, code string, email string) (models.User, error) {
 
 	hash := hashString(code)
-	user, err := us.store.GetUserForToken(ctx, hash, VERIFICATION)
+	user, err := us.store.GetUserForToken(ctx, hash, VERIFICATION, email)
 	if err != nil {
 		if errors.Is(err, models.ErrNotFound) {
 			return models.User{}, ErrInvalidToken

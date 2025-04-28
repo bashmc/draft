@@ -13,6 +13,7 @@ func (s *application) routes() *chi.Mux {
 
 	// users
 	mux.Post("/users", s.handler.CreateUser)
+	mux.Post("/users/verify", s.handler.VerifyUser)
 	mux.Get("/users/{id}", s.handler.GetUser)
 	mux.Delete("/users/{id}", s.handler.DeleteUser)
 

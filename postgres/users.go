@@ -16,7 +16,6 @@ type UserStore struct {
 	conn *pgxpool.Pool
 }
 
-
 func NewUserStore(conn *pgxpool.Pool) models.UserStore {
 	return &UserStore{
 		conn: conn,
@@ -26,7 +25,7 @@ func NewUserStore(conn *pgxpool.Pool) models.UserStore {
 // InsertUser implements models.UserStore.
 func (u *UserStore) InsertUser(ctx context.Context, user *models.User) error {
 	query := `
-		INSERT INTO users (id, name, email, password, profile_photo, created_at, updated_at, verified)
+		INSERT INTO users (id, name, email, password_hash, profile_photo, created_at, updated_at, verified)
 		VALUES ($1, NULLIF($2,''), $3, $4, $5, $6, $7, $8);`
 
 	_, err := u.conn.Exec(ctx, query,
@@ -68,7 +67,7 @@ func (u *UserStore) DeleteUser(ctx context.Context, id string) error {
 // GetUser implements models.UserStore.
 func (u *UserStore) GetUser(ctx context.Context, id uuid.UUID) (models.User, error) {
 	query := `
-		SELECT id, name, email, password, profile_photo, created_at, updated_at, verified 
+		SELECT id, name, email, password_hash, profile_photo, created_at, updated_at, verified 
 		FROM users 
 		WHERE id = $1;`
 
@@ -94,7 +93,7 @@ func (u *UserStore) GetUser(ctx context.Context, id uuid.UUID) (models.User, err
 // GetUserByMail implements models.UserStore.
 func (u *UserStore) GetUserByMail(ctx context.Context, email string) (models.User, error) {
 	query := `
-		SELECT id, name, email, password, profile_photo, created_at, updated_at, verified 
+		SELECT id, name, email, password_hash, profile_photo, created_at, updated_at, verified 
 		FROM users 
 		WHERE email = $1;`
 
@@ -117,12 +116,11 @@ func (u *UserStore) GetUserByMail(ctx context.Context, email string) (models.Use
 	return user, nil
 }
 
-
 // UpdateUser implements models.UserStore.
 func (u *UserStore) UpdateUser(ctx context.Context, user *models.User) error {
 	query := `
 		UPDATE users 
-		SET name = $1, email = $2, password = $3, profile_photo = $4, updated_at = $5, verified = $6
+		SET name = $1, email = $2, password_hash = $3, profile_photo = $4, updated_at = $5, verified = $6
 		WHERE id = $7;`
 
 	result, err := u.conn.Exec(ctx, query,
@@ -161,26 +159,27 @@ func (t *UserStore) InsertToken(ctx context.Context, token *models.UserToken) er
 }
 
 // GetUserForToken implements models.UserStore
-func (t *UserStore) GetUserForToken(ctx context.Context, tokenHash string, scope string) (models.User, error) {
+func (t *UserStore) GetUserForToken(ctx context.Context, tokenHash string, scope string, email string) (models.User, error) {
 	query := `SELECT
 	users.id,
 	users.name,
 	users.email,
 	users.password_hash,
-	users.profile_picture,
+	users.profile_photo,
 	users.verified,
-	users.created_at
-	users.update_at
+	users.created_at,
+	users.updated_at
 	FROM users
 	JOIN user_tokens AS tokens
 	ON users.id = tokens.user_id
 	WHERE tokens.token_hash = $1
 	AND tokens.scope = $2
+	AND users.email = $3
 	AND tokens.expires_at > now();
 	`
 
 	var user models.User
-	row := t.conn.QueryRow(ctx, query, tokenHash, scope)
+	row := t.conn.QueryRow(ctx, query, tokenHash, scope, email)
 	err := row.Scan(&user.Id, &user.Name, &user.Email, &user.PasswordHash, &user.ProfilePhoto, &user.Verified, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {

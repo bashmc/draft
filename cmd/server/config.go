@@ -14,10 +14,10 @@ type Config struct {
 func loadConfig() *Config {
 
 	mailCfg := &mail.Config{
-		Host:        os.Getenv("MAIL_HOST_URL"),
-		Token:       os.Getenv("MAIL_SECRET_TOKEN"),
-		SenderEmail: os.Getenv("MAIL_SENDER_EMAIL"),
-		SenderName:  os.Getenv("MAIL_SENDER_NAME"),
+		Host:        os.Getenv("MAIL_HOST"),
+		Token:       os.Getenv("MAIL_TOKEN"),
+		SenderEmail: os.Getenv("SENDER_EMAIL"),
+		SenderName:  os.Getenv("SENDER_NAME"),
 	}
 
 	return &Config{

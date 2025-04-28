@@ -1,5 +1,7 @@
+{{define "subject"}} Welcome to Draft {{end}}
+
 {{define "text"}}
-Hi {{.Name}},
+Hi {{.Address.Name}},
 
 Welcome to draft! Your email address has been successfully verified, and your account is all set up.
 
@@ -7,15 +9,6 @@ We're excited to help you manage your projects, collaborate with your team, and 
 effectively.
 
 Ready to dive in? Here are a few things you can do now:
-
-1. **Go to Your Dashboard:** Access your main workspace and get an overview.
-{{.dashboard_url}}
-
-2. **Create Your First Project:** Start organizing your tasks and ideas right away.
-(You can do this from your dashboard!)
-
-3. **Invite Your Team (Optional):** Collaboration is key! Bring your colleagues onboard.
-
 
 If you have any questions or need assistance getting started, don't hesitate to visit our Help Center at
 https://support.draft.com or reply to this email.
@@ -140,33 +133,23 @@ The draft Team
 
     <div class="container">
         <div class="header">
-            draft
+            {{template "subject"}}
         </div>
         <div class="content">
-            <h1>Welcome Aboard, {{.Name}}!</h1>
+            <h1>Welcome Aboard, {{.Address.Name}}!</h1>
             <p>Your email address has been successfully verified, and your draft account is ready to go.</p>
             <p>We're excited to help you manage your projects, collaborate seamlessly, and bring your ideas to life more
                 effectively.</p>
 
-            <a href="{{dashboard_url}}" class="cta-button" style="color: #ffffff;">Go to Your Dashboard</a>
-
-            <div class="secondary-actions">
-                <h2>Next Steps:</h2>
-                <ul>
-                    <li><strong>Create Your First Project:</strong> Start organizing your work right away (available on
-                        your dashboard).</li>
-                    <li><a href="{{invite_team_url}}"><strong>Invite Your Team (Optional):</strong></a> Bring your
-                        colleagues onboard for collaboration.</li>
-                </ul>
-            </div>
-
-            <p style="text-align: center; margin-top: 30px;">If you have any questions, visit our <a
-                    href="https://support.draft.com">Help Center</a> or simply reply to this email.</p>
-
         </div>
-        <div class="footer">
-            <p>Happy drafting,<br>The draft Team</p>
-        </div>
+
+        <p style="text-align: center; margin-top: 30px;">If you have any questions, visit our <a
+                href="https://support.draft.com">Help Center</a> or simply reply to this email.</p>
+
+    </div>
+    <div class="footer">
+        <p>Happy drafting,<br>The draft Team</p>
+    </div>
     </div>
 </body>
 

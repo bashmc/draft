@@ -6,9 +6,17 @@ POST {{baseUrl}}/users
 Content-Type: {{contentType}}
 
 {
-    "name": "Cap Foreign",
-    "email": "capforeign@example.com",
+    "name": "Jason Taylor",
+    "email": "jaytay@example.com",
     "password": "oliverman"
+}
+### Verify email for new user account
+POST {{baseUrl}}/users/verify
+Content-Type: {{contentType}}
+
+{
+    "email": "jaytay@example.com",
+    "code": "746618"
 }
 
 

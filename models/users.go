@@ -37,8 +37,6 @@ type UserStore interface {
 	GetUserByMail(ctx context.Context, email string) (User, error)
 	DeleteUser(ctx context.Context, Id string) error
 	InsertToken(ctx context.Context, token *UserToken) error
-	GetUserForToken(ctx context.Context, tokenHash string, scope string) (User, error)
+	GetUserForToken(ctx context.Context, tokenHash, scope, email string) (User, error)
 	DeleteToken(ctx context.Context, tokenHash, scope string) error
 }
-
-

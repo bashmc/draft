@@ -53,8 +53,8 @@ func NewMailer(config *Config) *Mailer {
 	return mailer
 }
 
-func (m *Mailer) generateMessage(recipient []Address, templateFile string, data interface{}) (*Message, error) {
-	tmpl, err := template.ParseFS(mailFS, "templates/style.html", fmt.Sprintf("templates/%s", templateFile))
+func (m *Mailer) generateMessage(recipient []Address, templateFile string, data any) (*Message, error) {
+	tmpl, err := template.ParseFS(mailFS, fmt.Sprintf("template/%s", templateFile))
 	if err != nil {
 		slog.Error("error parsing FS", "error", err)
 		return nil, err
@@ -68,14 +68,14 @@ func (m *Mailer) generateMessage(recipient []Address, templateFile string, data 
 	}
 
 	plainBody := new(bytes.Buffer)
-	err = tmpl.ExecuteTemplate(plainBody, "textBody", data)
+	err = tmpl.ExecuteTemplate(plainBody, "text", data)
 	if err != nil {
 		slog.Error("error executing text template", "error", err)
 		return nil, err
 	}
 
 	htmlBody := new(bytes.Buffer)
-	err = tmpl.ExecuteTemplate(htmlBody, "htmlBody", data)
+	err = tmpl.ExecuteTemplate(htmlBody, "html", data)
 	if err != nil {
 		slog.Error("error executing html template", "error", err)
 		return nil, err
