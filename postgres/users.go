@@ -16,6 +16,7 @@ type UserStore struct {
 	conn *pgxpool.Pool
 }
 
+
 func NewUserStore(conn *pgxpool.Pool) models.UserStore {
 	return &UserStore{
 		conn: conn,
@@ -90,6 +91,33 @@ func (u *UserStore) GetUser(ctx context.Context, id uuid.UUID) (models.User, err
 	return user, nil
 }
 
+// GetUserByMail implements models.UserStore.
+func (u *UserStore) GetUserByMail(ctx context.Context, email string) (models.User, error) {
+	query := `
+		SELECT id, name, email, password, profile_photo, created_at, updated_at, verified 
+		FROM users 
+		WHERE email = $1;`
+
+	var user models.User
+	err := u.conn.QueryRow(ctx, query, email).Scan(
+		&user.Id,
+		&user.Name,
+		&user.Email,
+		&user.PasswordHash,
+		&user.ProfilePhoto,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+		&user.Verified,
+	)
+
+	if errors.Is(err, pgx.ErrNoRows) {
+		return models.User{}, models.ErrNotFound
+	}
+
+	return user, nil
+}
+
+
 // UpdateUser implements models.UserStore.
 func (u *UserStore) UpdateUser(ctx context.Context, user *models.User) error {
 	query := `
@@ -113,6 +141,66 @@ func (u *UserStore) UpdateUser(ctx context.Context, user *models.User) error {
 
 	if result.RowsAffected() == 0 {
 		return models.ErrNotFound
+	}
+
+	return nil
+}
+
+// InsertToken implements models.TokenStore.
+func (t *UserStore) InsertToken(ctx context.Context, token *models.UserToken) error {
+	query := `INSERT INTO user_tokens(token_hash, user_id, scope, expires_at)
+	VALUES($1, $2, $3, $4);`
+
+	_, err := t.conn.Exec(ctx, query, token.Hash, token.UserId, token.Scope, token.ExpiresAt)
+	if err != nil {
+		slog.Error("failed to insert token", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+// GetUserForToken implements models.UserStore
+func (t *UserStore) GetUserForToken(ctx context.Context, tokenHash string, scope string) (models.User, error) {
+	query := `SELECT
+	users.id,
+	users.name,
+	users.email,
+	users.password_hash,
+	users.profile_picture,
+	users.verified,
+	users.created_at
+	users.update_at
+	FROM users
+	JOIN user_tokens AS tokens
+	ON users.id = tokens.user_id
+	WHERE tokens.token_hash = $1
+	AND tokens.scope = $2
+	AND tokens.expires_at > now();
+	`
+
+	var user models.User
+	row := t.conn.QueryRow(ctx, query, tokenHash, scope)
+	err := row.Scan(&user.Id, &user.Name, &user.Email, &user.PasswordHash, &user.ProfilePhoto, &user.Verified, &user.CreatedAt, &user.UpdatedAt)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return models.User{}, models.ErrNotFound
+		}
+		slog.Error("failed to fetch token", "error", err)
+		return models.User{}, err
+	}
+
+	return user, nil
+}
+
+// DeleteToken implements models.TokenStore.
+func (t *UserStore) DeleteToken(ctx context.Context, tokenHash, scope string) error {
+	query := `DELETE FROM user_tokens WHERE token_hash = $1 AND scope = $2;`
+
+	_, err := t.conn.Exec(ctx, query, tokenHash, scope)
+	if err != nil {
+		slog.Error("failed to delete user token", "error", err)
+		return err
 	}
 
 	return nil

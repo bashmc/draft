@@ -1,0 +1,174 @@
+{{define "text"}}
+Hi {{.Name}},
+
+Welcome to draft! Your email address has been successfully verified, and your account is all set up.
+
+We're excited to help you manage your projects, collaborate with your team, and bring your ideas to life more
+effectively.
+
+Ready to dive in? Here are a few things you can do now:
+
+1. **Go to Your Dashboard:** Access your main workspace and get an overview.
+{{.dashboard_url}}
+
+2. **Create Your First Project:** Start organizing your tasks and ideas right away.
+(You can do this from your dashboard!)
+
+3. **Invite Your Team (Optional):** Collaboration is key! Bring your colleagues onboard.
+
+
+If you have any questions or need assistance getting started, don't hesitate to visit our Help Center at
+https://support.draft.com or reply to this email.
+
+We're thrilled to have you on board!
+
+Happy drafting,
+The draft Team
+{{end}}
+
+{{define "html" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to draft!</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            font-size: 26px;
+            font-weight: bold;
+            color: #444444;
+        }
+
+        .content {
+            text-align: left;
+            padding: 0 10px;
+        }
+
+        .content h1 {
+            font-size: 22px;
+            color: #333333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+        }
+
+        .cta-button {
+            display: block;
+            width: fit-content;
+            margin: 25px auto;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .secondary-actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+            text-align: center;
+        }
+
+        .secondary-actions h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #555555;
+        }
+
+        .secondary-actions ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .secondary-actions li {
+            margin-bottom: 10px;
+        }
+
+        .secondary-actions a {
+            color: #007bff;
+            /* Adjust link color */
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777777;
+        }
+
+        .footer p {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <span
+        style="display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0px; max-width:0px; opacity:0; overflow:hidden;">You're
+        all set! Get started with your projects on draft.</span>
+
+    <div class="container">
+        <div class="header">
+            draft
+        </div>
+        <div class="content">
+            <h1>Welcome Aboard, {{.Name}}!</h1>
+            <p>Your email address has been successfully verified, and your draft account is ready to go.</p>
+            <p>We're excited to help you manage your projects, collaborate seamlessly, and bring your ideas to life more
+                effectively.</p>
+
+            <a href="{{dashboard_url}}" class="cta-button" style="color: #ffffff;">Go to Your Dashboard</a>
+
+            <div class="secondary-actions">
+                <h2>Next Steps:</h2>
+                <ul>
+                    <li><strong>Create Your First Project:</strong> Start organizing your work right away (available on
+                        your dashboard).</li>
+                    <li><a href="{{invite_team_url}}"><strong>Invite Your Team (Optional):</strong></a> Bring your
+                        colleagues onboard for collaboration.</li>
+                </ul>
+            </div>
+
+            <p style="text-align: center; margin-top: 30px;">If you have any questions, visit our <a
+                    href="https://support.draft.com">Help Center</a> or simply reply to this email.</p>
+
+        </div>
+        <div class="footer">
+            <p>Happy drafting,<br>The draft Team</p>
+        </div>
+    </div>
+</body>
+
+</html>
+{{end}}

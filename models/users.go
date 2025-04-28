@@ -23,9 +23,22 @@ type User struct {
 	Verified     bool      `json:"verified"`
 }
 
+type UserToken struct {
+	Hash      string
+	UserId    uuid.UUID
+	ExpiresAt time.Time
+	Scope     string
+}
+
 type UserStore interface {
 	InsertUser(ctx context.Context, user *User) error
 	UpdateUser(ctx context.Context, user *User) error
 	GetUser(ctx context.Context, Id uuid.UUID) (User, error)
+	GetUserByMail(ctx context.Context, email string) (User, error)
 	DeleteUser(ctx context.Context, Id string) error
+	InsertToken(ctx context.Context, token *UserToken) error
+	GetUserForToken(ctx context.Context, tokenHash string, scope string) (User, error)
+	DeleteToken(ctx context.Context, tokenHash, scope string) error
 }
+
+
