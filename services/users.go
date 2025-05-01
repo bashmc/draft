@@ -6,19 +6,17 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/bashmc/draft/mail"
-	"github.com/bashmc/draft/models"
 	"github.com/google/uuid"
+	"github.com/topbash/draft/mail"
+	"github.com/topbash/draft/models"
 	"golang.org/x/crypto/bcrypt"
 )
-
 
 var (
 	ErrInvalidCredentials = errors.New("invalid credentials")
 	ErrUnverifiedUser     = errors.New("user has an unverified email")
 	ErrInvalidToken       = errors.New("token is invalid or expired")
 )
-
 
 const (
 	VERIFICATION   = "verification"
@@ -80,7 +78,6 @@ func (s *UserService) CreateUser(ctx context.Context, name, email, password stri
 
 	s.sendEmail([]mail.Address{userAddr}, "verify_email.html", data)
 
-
 	return user, nil
 }
 
@@ -110,7 +107,6 @@ func (us *UserService) VerifyUser(ctx context.Context, code string, email string
 
 	return user, nil
 }
-
 
 func (us *UserService) ResendOTP(ctx context.Context, email string) error {
 	user, err := us.store.GetUserByMail(ctx, email)
@@ -142,6 +138,10 @@ func (us *UserService) ResendOTP(ctx context.Context, email string) error {
 	us.sendEmail([]mail.Address{userAddr}, "verify_email.html", data)
 
 	return nil
+}
+
+func (us *UserService) NewSession(context context.Context, email string, password string) (any, error) {
+	panic("unimplemented")
 }
 
 // UpdateUser updates an existing user's details

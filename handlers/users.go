@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/bashmc/draft/models"
-	"github.com/bashmc/draft/services"
+	"github.com/topbash/draft/models"
+	"github.com/topbash/draft/services"
 )
 
 func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -46,12 +46,11 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) VerifyUser(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Email string `json:"email" validate:"required,email"`
-		Code   string `json:"code" validate:"required"`
+		Code  string `json:"code" validate:"required"`
 	}
 
 	err := readJson(w, r, &input)
 	if err != nil {
-		slog.Error("failed to read request body", "error", err)
 		writeJson(w, http.StatusBadRequest, Map{"message": "failed to parse request body"})
 		return
 	}
@@ -77,6 +76,32 @@ func (h *Handler) VerifyUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Email    string `json:"email" validate:"required"`
+		Password string `json:"password" validate:"required"`
+	}
+
+	err := readJson(w, r, &input)
+	if err != nil {
+		writeJson(w, http.StatusBadRequest, Map{"message": "failed to parse request body"})
+		return
+	}
+	err = validate.Struct(input)
+	if err != nil {
+		writeJson(w, http.StatusBadRequest, Map{"message": err.Error()})
+		return
+	}
+
+	session, err := h.us.NewSession(r.Context(), input.Email, input.Password)
+	if err != nil {
+		//TODO: handle error
+		return
+	}
+
+	writeJson(w, http.StatusOK, session)
+}
+
 func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	userId := r.PathValue("id")
 	err := validate.Var(userId, "uuid")
@@ -84,7 +109,6 @@ func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 		writeJson(w, http.StatusBadRequest, Map{"message": "invalid id"})
 		return
 	}
-	slog.Debug("user string from url", slog.Any("id", userId))
 
 	user, err := h.us.FetchUser(r.Context(), getUUID(userId))
 	if err != nil {

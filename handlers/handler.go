@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/bashmc/draft/services"
 	"github.com/go-playground/validator/v10"
+	"github.com/topbash/draft/services"
 )
 
 // TODO: remove global variable

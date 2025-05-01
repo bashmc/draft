@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bashmc/draft/models"
-	"github.com/bashmc/draft/postgres"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/topbash/draft/models"
+	"github.com/topbash/draft/postgres"
 )
 
 func setupTestDB(t *testing.T) *pgxpool.Pool {

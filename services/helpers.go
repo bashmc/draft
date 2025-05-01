@@ -8,7 +8,7 @@ import (
 	"log/slog"
 	"math/big"
 
-	"github.com/bashmc/draft/mail"
+	"github.com/topbash/draft/mail"
 )
 
 // GenerateOTP generates a 6-digit OTP as a string

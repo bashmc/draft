@@ -1,4 +1,4 @@
-module github.com/bashmc/draft
+module github.com/topbash/draft
 
 go 1.24.1
 
