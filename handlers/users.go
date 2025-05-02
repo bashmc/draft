@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/topbash/draft/models"
-	"github.com/topbash/draft/services"
+	"github.com/shcmd/draft/models"
+	"github.com/shcmd/draft/services"
 )
 
 func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {

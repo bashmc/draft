@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/topbash/draft/mail"
+	"github.com/shcmd/draft/mail"
 )
 
 type Config struct {

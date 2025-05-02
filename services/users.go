@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/topbash/draft/mail"
-	"github.com/topbash/draft/models"
+	"github.com/shcmd/draft/mail"
+	"github.com/shcmd/draft/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

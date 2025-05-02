@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/topbash/draft/handlers"
+	"github.com/shcmd/draft/handlers"
 )
 
 type application struct {
