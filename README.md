@@ -1,6 +1,6 @@
 # Draft - Project Management System
 
-**🚧 This project is currently under active development 🚧**
+**🚧 This project is currently under development 🚧**
 
 ## Overview
 Draft is a collaborative project management system built with Go and Vue.js, designed to help teams organize and track their work efficiently.
