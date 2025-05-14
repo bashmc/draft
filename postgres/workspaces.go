@@ -5,10 +5,10 @@ import (
 	"errors"
 	"log/slog"
 
+	"github.com/gitsnack/draft/models"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/shcmd/draft/models"
 )
 
 type WorkspaceStore struct {

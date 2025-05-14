@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/gitsnack/draft/mail"
+	"github.com/gitsnack/draft/models"
 	"github.com/google/uuid"
-	"github.com/shcmd/draft/mail"
-	"github.com/shcmd/draft/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

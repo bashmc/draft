@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gitsnack/draft/models"
+	"github.com/gitsnack/draft/postgres"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/shcmd/draft/models"
-	"github.com/shcmd/draft/postgres"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

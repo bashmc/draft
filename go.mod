@@ -1,4 +1,4 @@
-module github.com/shcmd/draft
+module github.com/gitsnack/draft
 
 go 1.24.1
 

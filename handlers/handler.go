@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"github.com/gitsnack/draft/services"
 	"github.com/go-playground/validator/v10"
-	"github.com/shcmd/draft/services"
 )
 
 // TODO: remove global variable
